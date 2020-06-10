@@ -20,15 +20,21 @@ function buscarDados() {
     'click',
     () => {
       if (!isCampoVazio(artista.value, musica.value)) {
-        msgError.innerText = 'Informe o artista e a música!';
+        validarCamposVazios();
+        limparCamposLyrics();
       } else {
-        headerLyrics.innerText = artista.value + ' - ' + music.value;
-        limparCampos();
-        limparMsgError();
+        render();
       }
     },
     false
   );
+}
+
+function render() {
+  headerLyrics.innerText = artista.value + ' - ' + music.value;
+  fetchLyrics();
+  limparCampos();
+  limparMsgError();
 }
 
 async function fetchLyrics() {
@@ -37,10 +43,8 @@ async function fetchLyrics() {
     let json = await fetch(
       `https://api.lyrics.ovh/v1/${artista.value}/${musica.value}`
     );
-    console.log('json');
     let letra = await json.json();
-    console.log(letra.lyrics);
-    //bodyLyrics.innerText = letra.lyrics;
+    bodyLyrics.innerText = letra.lyrics;
     limparMsgError();
   } catch (error) {
     msgError.innerText = 'Ocorreu um erro na busca da música:' + error.message;
@@ -62,8 +66,26 @@ function limparCamposLyrics() {
 function limparCampos() {
   artista.value = '';
   musica.value = '';
+  artista.focus();
 }
 
 function limparMsgError() {
   msgError.innerText = '';
+}
+
+function validarCamposVazios() {
+  if (artista.value == +'' && musica.value == +'') {
+    msgError.innerText = 'Informe o artista e a música!';
+    artista.focus();
+  } else {
+    if (artista.value === '' && musica.value !== '') {
+      msgError.innerText = 'Informe o artista!';
+      artista.focus();
+    } else {
+      if (musica.value === '' && artista.value !== '') {
+        msgError.innerText = 'Informe a música!';
+        musica.focus();
+      }
+    }
+  }
 }
