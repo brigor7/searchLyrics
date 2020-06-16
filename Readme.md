@@ -8,3 +8,6 @@ Fazer pesquisa de letra de música, digitando o cantor e o nome da música. A p�
 - [X] HTML
 - [X] CSS
 - [X] Javascript
+
+# Visão da página
+![](https://github.com/brigor7/searchLyrics/blob/master/review.jpg)
